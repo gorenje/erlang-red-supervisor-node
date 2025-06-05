@@ -1,0 +1,76 @@
+{
+  "erlsupervisor": {
+
+        "superviseFlow": "supervisor: flow",
+        "superviseGroup": "supervisor: group",
+        "nodeCount": "supervisor: __number__",
+
+        "label": {
+          "restart_strategy": "Restart Strategy",
+          "auto_shutdown": "Auto Shutdown",
+
+          "child_restart": "Restart",
+          "child_type": "Type",
+          "child_shutdown": "Shutdown",
+
+          "supervisor_type": "Type of Supervisor",
+
+          "source": "Supervised Nodes",
+          "selectAll": "select all",
+
+          "intensity": "Intensity (count)",
+          "period": "Period (seconds)",
+          "tab": {
+            "supervisor_config": "Options",
+            "child_config": "Children"
+          }
+        },
+
+        "placeholder": {
+          "intensity": "Count",
+          "period": "Seconds",
+          "timeout": "Timeout (secs)"
+        },
+
+        "supervisor_type": {
+          "dynamic": "Dynamic child specification",
+          "static": "Static child specification"
+        },
+
+        "child_type": {
+          "worker": "Worker",
+          "supervisor": "Supervisor"
+        },
+
+        "child_shutdown": {
+          "brutal_kill": "Brutal Kill",
+          "timeout": "Timeout",
+          "infinite": "Infinite Timeout"
+        },
+
+        "child_restart": {
+          "transient": "Transient",
+          "temporary": "Temporary",
+          "permanent": "Permanent"
+        },
+
+        "auto_shutdown": {
+          "never": "Never",
+          "any_significant": "Any Significant",
+          "all_significant": "All Significant"
+        },
+
+        "restart_strategy": {
+          "one_for_one": "One for one",
+          "one_for_all": "One for All",
+          "rest_for_one": "Rest for one",
+          "simple_one_for_one": "Simple One for one"
+        },
+
+        "scope": {
+          "all": "All flow nodes",
+          "group": "In same group",
+          "selected": "Selected nodes"
+        }
+  }
+}

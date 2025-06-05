@@ -1,0 +1,35 @@
+{
+  "name" : "@gregoriusrippenstein/erlang-red-supervisor-node",
+  "version": "0.1.3",
+  "dependencies": {
+  },
+
+  "description": "Supervisor node for Erlang-RED to restart nodes that fail.",
+  "keywords": [
+    "erlang-red",
+    "process-supervision"
+  ],
+
+  "license": "Don't do evil.",
+  "homepage": "https://github.com/gorenje/erlang-red-supervisor-node#readme",
+  "author": "Gerrit Riessen <gerrit@flowhub.org>",
+  "engines": {
+    "node": ">=14"
+  },
+
+  "node-red" : {
+    "version": ">=3.0.0",
+
+    "nodes": {
+       "erlsupervisor": "nodes/erlsupervisor.js"
+    }
+  },
+
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gorenje/erlang-red-supervisor-node.git"
+  },
+  "bugs": {
+    "url": "https://github.com/gorenje/erlang-red-supervisor-node"
+  }
+}
