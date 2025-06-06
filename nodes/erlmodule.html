@@ -1,0 +1,123 @@
+<script type="text/javascript">
+  (function(){
+  
+  RED.nodes.registerType('erlmodule',{
+    color: '#fdd0a2',
+    icon: "font-awesome/fa-keyboard-o",
+    category: 'function',
+    paletteLabel: 'Module Code',
+    defaults: {
+      name: {
+        value: "",
+      },
+      module_name: {
+        value:"",
+        required: true,
+        validate: RED.validators.regex(/^[a-z0-9_]+$/)        
+      },
+      code: {
+        value: "",
+        required: true
+      }
+    },
+
+    inputs: 0,
+
+    outputs: 1,
+
+    label: function() {
+      return (this.name || this.module_name || this._def.paletteLabel);
+    },
+
+    labelStyle: function() {
+      return this.name?"node_label_italic":"";
+    },
+
+    onpaletteadd: function() {
+    },
+
+    onpaletteremove: function() {
+    },
+
+    oneditprepare: function() {
+      var node = this;
+
+      var tabs = RED.tabs.create({
+        id: "erlmodule-tabs",
+        onchange: function (tab) {
+          $("#erlmodule-tabs-content").children().hide();
+          $("#" + tab.id).show();
+        }
+      });
+
+      tabs.addTab({
+        id: "erlmodule-tab-config",
+        iconClass: "fa fa-cog",
+        label: node._("erlmodule.label.tab.config")
+      });
+
+      tabs.addTab({
+        id: "erlmodule-tab-code",
+        iconClass: "fa fa-cog",
+        label: node._("erlmodule.label.tab.code")
+      });
+
+      tabs.activateTab("erlmodule-tab-code");
+
+      this.editor = RED.editor.createEditor({
+        id: 'node-input-erlmodule-editor',
+        mode: 'ace/mode/erlang',
+        value: this.code,
+        width: "Infinity",
+        height: "calc(90vh)",
+        focus: true
+      });
+    },
+
+    oneditcancel: function() {
+      this.editor.destroy();
+      delete this.editor;      
+    },
+
+    oneditsave: function() {
+      this.code = this.editor.getValue();
+      this.editor.destroy();
+      delete this.editor;      
+    },
+
+    oneditresize: function(size) {
+    },
+
+
+  });
+})();
+
+</script>
+
+<script type="text/html" data-template-name="erlmodule">
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="node-red:common.label.name"></span></label>
+    <input type="text" id="node-input-name" data-i18n="[placeholder]node-red:common.label.name">
+  </div>
+
+  <div class="form-row func-tabs-row">
+    <ul style="min-width: 400px; margin-bottom: 20px;" id="erlmodule-tabs"></ul>
+  </div>
+  
+  <div id="erlmodule-tabs-content" style="min-height: calc(100% - 95px);">
+  
+    <div id="erlmodule-tab-config" style="display:none">
+      <div class="form-row">
+        <label for="node-input-module_name"><i class="fa fa-tag"></i> <span data-i18n="erlmodule.label.name"></span></label>
+        <input type="text" id="node-input-module_name" data-i18n="[placeholder]erlmodule.label.name">
+      </div>
+    </div>
+  
+    <div id="erlmodule-tab-code" style="display:none">
+      <div class="form-row">
+         <div style="height: 600px; min-height:150px;" class="node-text-editor" id="node-input-erlmodule-editor"></div>
+      </div>
+    </div>
+  </div>
+  
+</script>

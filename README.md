@@ -10,3 +10,17 @@ This node allows for the definition of dynamic supervisors to monitor a set of n
 
 For more details, [Erlang Documentation](https://www.erlang.org/doc/apps/stdlib/supervisor.html).
 
+Example [flow](https://flows.red-erik.org/f/83c5e1824f32abec).
+
+## Erlang Module
+
+Node for defining the code for an erlang module.
+
+## Erlang statemachine
+
+Node for defining a [state machine](https://www.erlang.org/doc/apps/stdlib/gen_statem) as a node. This uses an erlmodule node as handler, so that the state machine can be completely defined inside of Erlang-Red. Example [flow](https://flows.red-erik.org/f/5672fa442b2b881d).
+
+## Erlang event handler
+
+Event handler [gen_event](https://www.erlang.org/doc/apps/stdlib/gen_event.html).
+

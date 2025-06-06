@@ -1,0 +1,19 @@
+{
+  "erlstatemachine": {
+
+
+    "label": {
+      "statusset": "Status Set",
+      "tab": {
+        "statem_config": "Statemachine",
+        "handler_config": "Handler"
+      },
+      "emit-on-state-change": "Only emit output message on state change"
+    },
+
+    "status": {
+      "waiting": "Waiting for Godot",
+      "timeout": "No more time to waiting"
+    }
+  }
+}

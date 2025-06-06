@@ -4,7 +4,7 @@
   RED.nodes.registerType('erlsupervisor',{
     color: '#E9967A',
     icon: "font-awesome/fa-ambulance",
-    category: 'common',
+    category: 'behaviour',
     paletteLabel: 'Supervisor',
     
     defaults: {
@@ -14,7 +14,7 @@
 
       scope: { value: "flow", type: "*[]" },
 
-      supervisor_type: { value: "dynamic" },
+      supervisor_type: { value: "static" },
       strategy: { value: "one_for_one" },
       auto_shutdown: { value: "never" },
       intensity: { value: "1" },
@@ -54,10 +54,6 @@
 
     oneditprepare: function() {
       var node = this;
-      var childDirList = undefined;
-
-      $("#node-input-erlsupervisor-child-target-container-div")
-
 
       var tabs = RED.tabs.create({
         id: "erlsupervisor-tabs",
@@ -134,7 +130,7 @@
       var nodeItemMap = {};
 
       candidateNodes.forEach(function (n) {
-        if (n.id === node.id) {
+        if (n.id === node.id || n.type === "erlmodule") {
           return;
         }
         var isChecked = scope.indexOf(n.id) !== -1;
@@ -279,7 +275,7 @@
         <div id="erlsupervisor-tab-supervisor-config" style="display:none">
           <div class="form-row">
             <label style="width: 150px;" for="node-input-supervisor_type" data-i18n="erlsupervisor.label.supervisor_type"></label>
-            <select id="node-input-supervisor_type">
+            <select id="node-input-supervisor_type" disabled>
                 <option value="dynamic" data-i18n="erlsupervisor.supervisor_type.dynamic"></option>
                 <option value="static" data-i18n="erlsupervisor.supervisor_type.static"></option>
             </select>

@@ -1,6 +1,6 @@
 {
   "name" : "@gregoriusrippenstein/erlang-red-supervisor-node",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "dependencies": {
   },
 
@@ -22,7 +22,10 @@
     "version": ">=3.0.0",
 
     "nodes": {
-       "erlsupervisor": "nodes/erlsupervisor.js"
+       "erlsupervisor": "nodes/erlsupervisor.js",
+       "erlmodule": "nodes/erlmodule.js",
+       "erlstatemachine": "nodes/erlstatemachine.js",
+       "erleventhandler": "nodes/erleventhandler.js"
     }
   },
 

@@ -1,0 +1,19 @@
+{
+  "erlmodule": {
+
+
+    "label": {
+      "statusset": "Status Set",
+      "name": "Module Name",
+      "tab": {
+        "code": "Code",
+        "config": "Settings"
+      }
+    },
+
+    "status": {
+      "waiting": "Waiting for Godot",
+      "timeout": "No more time to waiting"
+    }
+  }
+}
