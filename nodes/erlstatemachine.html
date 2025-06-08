@@ -66,7 +66,6 @@
 
       tabs.activateTab("erlstatemachine-tab-handler-config");
 
-
       var dirList = $("#node-input-handler-target-container-div").css({
         width: "100%",
         height: "calc(100%)"
@@ -80,8 +79,16 @@
           RED.view.select(item.nodeid);
         }
       }).on('treelistconfirm', function (event, item) {
-      });
-
+      }).on("treelistitemmouseover", function (e, item) {
+        item.node.highlighted = true;
+        item.node.dirty = true;
+        RED.view.redraw();
+      }).on("treelistitemmouseout", function (e, item) {
+        item.node.highlighted = false;
+        item.node.dirty = true;
+        RED.view.redraw();
+      }) 
+      
       var search = $("#node-input-handler-target-filter").searchBox({
         style: "compact",
         delay: 300,
@@ -104,6 +111,7 @@
           label: RED.utils.getNodeLabel(nde),
           icon: "",
           nodeid: nde.id,
+          node: nde,
           sublabel: nde.type,
           selected: nde.id == this.nodeid,
           checkbox: false,
