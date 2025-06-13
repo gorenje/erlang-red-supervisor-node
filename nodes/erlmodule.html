@@ -16,7 +16,7 @@
         validate: RED.validators.regex(/^[a-z0-9_]+$/)        
       },
       code: {
-        value: "",
+        value: "-module()\n\n-export()\n\n",
         required: true
       }
     },
@@ -41,28 +41,6 @@
 
     oneditprepare: function() {
       var node = this;
-
-      var tabs = RED.tabs.create({
-        id: "erlmodule-tabs",
-        onchange: function (tab) {
-          $("#erlmodule-tabs-content").children().hide();
-          $("#" + tab.id).show();
-        }
-      });
-
-      tabs.addTab({
-        id: "erlmodule-tab-config",
-        iconClass: "fa fa-cog",
-        label: node._("erlmodule.label.tab.config")
-      });
-
-      tabs.addTab({
-        id: "erlmodule-tab-code",
-        iconClass: "fa fa-cog",
-        label: node._("erlmodule.label.tab.code")
-      });
-
-      tabs.activateTab("erlmodule-tab-code");
 
       this.editor = RED.editor.createEditor({
         id: 'node-input-erlmodule-editor',
@@ -96,28 +74,16 @@
 
 <script type="text/html" data-template-name="erlmodule">
   <div class="form-row">
-    <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="node-red:common.label.name"></span></label>
-    <input type="text" id="node-input-name" data-i18n="[placeholder]node-red:common.label.name">
+    <label for="node-input-module_name"><i class="fa fa-tag"></i> <span data-i18n="erlmodule.label.module_name"></span></label>
+    <input type="text" id="node-input-module_name" data-i18n="[placeholder]erlmodule.label.module_name">
+  </div>
+  
+  <div class="form-row">
+      <div style="height: 73vh; min-height:150px;" class="node-text-editor" id="node-input-erlmodule-editor"></div>
   </div>
 
-  <div class="form-row func-tabs-row">
-    <ul style="min-width: 400px; margin-bottom: 20px;" id="erlmodule-tabs"></ul>
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="erlmodule.label.name"></span></label>
+    <input type="text" id="node-input-name" data-i18n="[placeholder]erlmodule.label.name">
   </div>
-  
-  <div id="erlmodule-tabs-content" style="min-height: calc(100% - 95px);">
-  
-    <div id="erlmodule-tab-config" style="display:none">
-      <div class="form-row">
-        <label for="node-input-module_name"><i class="fa fa-tag"></i> <span data-i18n="erlmodule.label.name"></span></label>
-        <input type="text" id="node-input-module_name" data-i18n="[placeholder]erlmodule.label.name">
-      </div>
-    </div>
-  
-    <div id="erlmodule-tab-code" style="display:none">
-      <div class="form-row">
-         <div style="height: 600px; min-height:150px;" class="node-text-editor" id="node-input-erlmodule-editor"></div>
-      </div>
-    </div>
-  </div>
-  
 </script>

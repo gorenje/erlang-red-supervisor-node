@@ -4,7 +4,8 @@
 
     "label": {
       "statusset": "Status Set",
-      "name": "Module Name",
+      "name": "Name",
+      "module_name": "Module Name",
       "tab": {
         "code": "Code",
         "config": "Settings"

@@ -10,6 +10,9 @@
       name: {
         value:"",
       },
+      handlers: {
+        value: [{ nodeid: ""}]
+      }
     },
 
     inputs: 1,
@@ -31,12 +34,38 @@
     },
 
     oneditprepare: function() {
+      let allModules = [ ["", "-- select module --"], ...RED.nodes.filterNodes({ type: "erlmodule" }).map( d => [d.id, d.module_name] )]
+
+      this.handlers.sort((a, b) => a.nodeid < b.nodeid).forEach(currVal => {
+        var sltObj = $('<select>', { class: 'erleventhandler-erlmodule' })
+
+        for (var idx = 0; idx < allModules.length; idx++) {
+          let val = allModules[idx]
+          let selected = val[0] == currVal.nodeid ? { selected: "selected" } : {}
+
+          sltObj.append($("<option>", { value: val[0], ...selected }).append(val[1]))
+        }
+
+        var container = $("<div>", { class: "form-row" });
+
+        container.append('<a href="#" style="float: right; color: red;" onclick="$(this).parent().remove(); return false;"><i class="fa fa-close"></i></a>')
+        container.append('<a href="#" style="float: right; margin-right: 10px; color: green;" onclick="$(\'#erleventhandler-handler-config-container\').append($(this).parent().clone()); return false;"><i class="fa fa-plus"></i></a>')
+
+        container.append(sltObj)
+
+        container.appendTo($('#erleventhandler-handler-config-container'))
+      })      
     },
 
     oneditcancel: function() {
     },
 
     oneditsave: function() {
+      let result = []
+      $($('#erleventhandler-handler-config-container').find('.erleventhandler-erlmodule')).each((idx, elem) => {
+        result.push({ nodeid: $(elem).val() })
+      })
+      this.handlers = result
     },
 
     oneditresize: function(size) {
@@ -52,5 +81,19 @@
   <div class="form-row">
     <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="node-red:common.label.name"></span></label>
     <input type="text" id="node-input-name" data-i18n="[placeholder]node-red:common.label.name">
+  </div>
+
+  <div class="form-row">
+    <span>Select a static selection of event handlers. <br>
+       Need to define Erlang Module node first else <br>
+      this selection will be empty.</span>
+      
+    <p>
+    <span>This can be dynamically extended at runtime <br>
+    using the <b>add_handler</b> message type.</span>
+  </div>
+
+  <div class="form-row">
+    <div id="erleventhandler-handler-config-container"></div>
   </div>
 </script>
