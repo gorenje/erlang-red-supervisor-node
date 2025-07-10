@@ -25,7 +25,8 @@
        "erlsupervisor": "nodes/erlsupervisor.js",
        "erlmodule": "nodes/erlmodule.js",
        "erlstatemachine": "nodes/erlstatemachine.js",
-       "erleventhandler": "nodes/erleventhandler.js"
+       "erleventhandler": "nodes/erleventhandler.js",
+       "erlgenserver": "nodes/erlgenserver.js"
     }
   },
 

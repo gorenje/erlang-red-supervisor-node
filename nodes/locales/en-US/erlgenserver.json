@@ -1,14 +1,11 @@
 {
-  "erlstatemachine": {
-
-
+  "erlgenserver": {
     "label": {
       "statusset": "Status Set",
       "tab": {
         "statem_config": "Options",
         "handler_config": "Module"
-      },
-      "emit-on-state-change": "Only emit output message on state change"
+      }
     },
 
     "status": {

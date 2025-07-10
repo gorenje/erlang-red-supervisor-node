@@ -1,11 +1,10 @@
 <script type="text/javascript">
   (function(){
-    
-  RED.nodes.registerType('erlstatemachine',{
+    RED.nodes.registerType('erlgenserver',{
     color: '#FFCC66',
-    icon: "font-awesome/fa-gears",
+    icon: "font-awesome/fa-server",
     category: 'behaviour',
-    paletteLabel: 'State Machine',
+    paletteLabel: 'Generic Server',
     defaults: {
       name: {
         value:"",
@@ -17,9 +16,6 @@
         value: "",
         required: true,
         validate: RED.validators.regex(/[a-zA-Z0-9]{16}/)
-      },
-      emit_on_state_change: {
-        value: false
       }
     },
 
@@ -27,10 +23,10 @@
 
     outputs: 1,
 
-    label: function() {
+    label: function () {
       let label = this._def.paletteLabel
       if (this.module_name) {
-        label = `[${this.module_name}]\t${this.emit_on_state_change ? "⋮" : "➝"}`
+        label = `[${this.module_name}]`
       }
       return (this.name || label);
     },
@@ -49,26 +45,26 @@
       var node = this;
 
       var tabs = RED.tabs.create({
-        id: "erlstatemachine-tabs",
+        id: "erlgenserver-tabs",
         onchange: function (tab) {
-          $("#erlstatemachine-tabs-content").children().hide();
+          $("#erlgenserver-tabs-content").children().hide();
           $("#" + tab.id).show();
         }
       });
 
       tabs.addTab({
-        id: "erlstatemachine-tab-statem-config",
+        id: "erlgenserver-tab-statem-config",
         iconClass: "fa fa-cog",
-        label: node._("erlstatemachine.label.tab.statem_config")
+        label: node._("erlgenserver.label.tab.statem_config")
       });
 
       tabs.addTab({
-        id: "erlstatemachine-tab-handler-config",
+        id: "erlgenserver-tab-handler-config",
         iconClass: "fa fa-keyboard-o",
-        label: node._("erlstatemachine.label.tab.handler_config")
+        label: node._("erlgenserver.label.tab.handler_config")
       });
 
-      tabs.activateTab("erlstatemachine-tab-handler-config");
+      tabs.activateTab("erlgenserver-tab-handler-config");
 
       var dirList = $("#node-input-handler-target-container-div").css({
         width: "100%",
@@ -91,8 +87,8 @@
         item.node.highlighted = false;
         item.node.dirty = true;
         RED.view.redraw();
-      }) 
-      
+      })
+
       var search = $("#node-input-handler-target-filter").searchBox({
         style: "compact",
         delay: 300,
@@ -136,7 +132,7 @@
 
         let node = RED.nodes.node(this.nodeid)
         this.module_name = node.module_name;
-      }
+      }      
     },
 
     oneditresize: function(size) {
@@ -148,34 +144,33 @@
 
 </script>
 
-<script type="text/html" data-template-name="erlstatemachine">
+<script type="text/html" data-template-name="erlgenserver">
   <div class="form-row">
     <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="node-red:common.label.name"></span></label>
     <input type="text" id="node-input-name" data-i18n="[placeholder]node-red:common.label.name">
   </div>
-
-  <div class="form-row func-tabs-row">
-    <ul style="min-width: 400px; margin-bottom: 20px;" id="erlstatemachine-tabs"></ul>
-  </div>
-
-  <div id="erlstatemachine-tabs-content" style="min-height: calc(100% - 95px);">
-
-    <div id="erlstatemachine-tab-statem-config" style="display:none">
-      <div class="form-row">
-        <input type="checkbox" id="node-input-emit_on_state_change"
-                style="display:inline-block; width:15px; vertical-align:baseline;">
-        <label for="node-input-emit_on_state_change"><span data-i18n="erlstatemachine.label.emit-on-state-change"></span></label>
-      </div>
+    
+    <div class="form-row func-tabs-row">
+      <ul style="min-width: 400px; margin-bottom: 20px;" id="erlgenserver-tabs"></ul>
     </div>
-
-    <div id="erlstatemachine-tab-handler-config" style="display:none">
-      <div class="form-row" style="margin-left: 10px; position: relative; height: 40vh; margin-right: 15px; min-height: 5vh;">
-        <div style=" margin-bottom: 5px; width: 35%; padding-left: 60%;">
-          <input type="text" id="node-input-handler-target-filter">
+    
+    <div id="erlgenserver-tabs-content" style="min-height: calc(100% - 95px);">
+    
+      <div id="erlgenserver-tab-statem-config" style="display:none">
+        <div class="form-row">
+          No options at the moment.
         </div>
-      
-        <div id="node-input-handler-target-container-div"></div>
+      </div>
+    
+      <div id="erlgenserver-tab-handler-config" style="display:none">
+        <div class="form-row"
+          style="margin-left: 10px; position: relative; height: 40vh; margin-right: 15px; min-height: 5vh;">
+          <div style=" margin-bottom: 5px; width: 35%; padding-left: 60%;">
+            <input type="text" id="node-input-handler-target-filter">
+          </div>
+    
+          <div id="node-input-handler-target-container-div"></div>
+        </div>
       </div>
     </div>
-  </div>
 </script>
