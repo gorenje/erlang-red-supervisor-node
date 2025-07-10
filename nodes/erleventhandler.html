@@ -11,7 +11,7 @@
         value:"",
       },
       handlers: {
-        value: [{ nodeid: ""}]
+        value: [{ nodeid: "", moduleterm: ""}]
       }
     },
 
@@ -46,12 +46,14 @@
           sltObj.append($("<option>", { value: val[0], ...selected }).append(val[1]))
         }
 
+        var txtObj = $('<input>', { type: "text", value: currVal.moduleterm, style: "width: 200px;", class: "erleventhandler-erlterm" })
+
         var container = $("<div>", { class: "form-row" });
 
         container.append('<a href="#" style="float: right; color: red;" onclick="$(this).parent().remove(); return false;"><i class="fa fa-close"></i></a>')
         container.append('<a href="#" style="float: right; margin-right: 10px; color: green;" onclick="$(\'#erleventhandler-handler-config-container\').append($(this).parent().clone()); return false;"><i class="fa fa-plus"></i></a>')
 
-        container.append(sltObj)
+        container.append(sltObj).append(txtObj)
 
         container.appendTo($('#erleventhandler-handler-config-container'))
       })      
@@ -63,7 +65,7 @@
     oneditsave: function() {
       let result = []
       $($('#erleventhandler-handler-config-container').find('.erleventhandler-erlmodule')).each((idx, elem) => {
-        result.push({ nodeid: $(elem).val() })
+        result.push({ nodeid: $(elem).val(), moduleterm: $(elem).siblings().filter(".erleventhandler-erlterm").val() })
       })
       this.handlers = result
     },

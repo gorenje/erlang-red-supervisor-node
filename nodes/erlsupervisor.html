@@ -197,7 +197,7 @@
             RED.tray.show();
           },
           filter: function (n) {
-            return n.id !== node.id;
+            return n.id !== node.id && n.type != "erlmodule";
           }
         });
       })

@@ -10,14 +10,9 @@
       name: {
         value:"",
       },
-      module_name: {
-        value: ""
-      },
-      nodeid: {
-        value: "",
-        required: true,
-        validate: RED.validators.regex(/[a-zA-Z0-9]{16}/)
-      },
+
+      scope: { value: null, type: "*[]" },
+
       emit_on_state_change: {
         value: false
       }
@@ -29,8 +24,9 @@
 
     label: function() {
       let label = this._def.paletteLabel
-      if (this.module_name) {
-        label = `[${this.module_name}]\t${this.emit_on_state_change ? "⋮" : "➝"}`
+      if (this.scope && this.scope.length > 0) {
+        let nodeLabels = this.scope.map( d => RED.nodes.node(d) ).map( nde => RED.utils.getNodeLabel(nde))
+        label = `[${nodeLabels.join(", ")}]\t${this.emit_on_state_change ? "⋮" : "➝"}`
       }
       return (this.name || label);
     },
@@ -47,6 +43,12 @@
 
     oneditprepare: function() {
       var node = this;
+      // nodeid was the old value, scope is the new. Why? Because Node-RED editor
+      // updates "scope" variable name with new node ids automagically when doing
+      // copy and paste operations.
+      if ( (!node.scope || node.scope.length == 0) && node.nodeid != "" ) {
+        node.scope = [node.nodeid]
+      }
 
       var tabs = RED.tabs.create({
         id: "erlstatemachine-tabs",
@@ -117,7 +119,7 @@
           nodeid: nde.id,
           node: nde,
           sublabel: nde.type,
-          selected: nde.id == this.nodeid,
+          selected: this.scope && (this.scope.indexOf(nde.id) > -1),
           checkbox: false,
           radio: true,
           children: undefined
@@ -131,18 +133,15 @@
     },
 
     oneditsave: function() {
-      if ($("#node-input-handler-target-container-div").treeList('selected').nodeid) {
-        this.nodeid = $("#node-input-handler-target-container-div").treeList('selected').nodeid;
-
-        let node = RED.nodes.node(this.nodeid)
-        this.module_name = node.module_name;
+      if ( $("#node-input-handler-target-container-div").treeList('selected').nodeid ) {
+        this.scope = [$("#node-input-handler-target-container-div").treeList('selected').nodeid]
+      } else {
+        this.scope = []
       }
     },
 
     oneditresize: function(size) {
     },
-
-
   });
 })();
 
