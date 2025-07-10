@@ -28,7 +28,11 @@
     outputs: 1,
 
     label: function() {
-      return (this.name || this._def.paletteLabel);
+      let label = this._def.paletteLabel
+      if (this.module_name) {
+        label = `[${this.module_name}]\t${this.emit_on_state_change ? "⋮" : "➝"}`
+      }
+      return (this.name || label);
     },
 
     labelStyle: function() {
