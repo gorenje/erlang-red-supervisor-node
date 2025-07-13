@@ -4,4 +4,12 @@
 
 See <a href="https://www.erlang.org/doc/apps/stdlib/gen_server.html">OTP Docu</a> for more details.
 
+<p>
+  Default is to address modules using <code>gen_server:call(Pid,....)</code> to allow for 
+  multiple instance of the same module.
+</p>
+
+<P>
+  To enforce singleton behaviour, use module name addressing and ensure that the module
+  is only started by one generic server node. This is <b>not</b> enforced by the system.
 </script>
