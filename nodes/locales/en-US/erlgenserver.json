@@ -2,7 +2,7 @@
   "erlgenserver": {
     "label": {
       "statusset": "Status Set",
-      "use_module_name_addressing": "Use module name to send messages",
+      "use_module_name_addressing": "Use module name addressing - Singleton Module",
       "tab": {
         "statem_config": "Options",
         "handler_config": "Module"

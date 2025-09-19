@@ -41,28 +41,6 @@
     oneditprepare: function() {
       var node = this;
 
-      var tabs = RED.tabs.create({
-        id: "erlgenserver-tabs",
-        onchange: function (tab) {
-          $("#erlgenserver-tabs-content").children().hide();
-          $("#" + tab.id).show();
-        }
-      });
-
-      tabs.addTab({
-        id: "erlgenserver-tab-statem-config",
-        iconClass: "fa fa-cog",
-        label: node._("erlgenserver.label.tab.statem_config")
-      });
-
-      tabs.addTab({
-        id: "erlgenserver-tab-handler-config",
-        iconClass: "fa fa-keyboard-o",
-        label: node._("erlgenserver.label.tab.handler_config")
-      });
-
-      tabs.activateTab("erlgenserver-tab-handler-config");
-
       var dirList = $("#node-input-handler-target-container-div").css({
         width: "100%",
         height: "calc(100%)"
@@ -141,31 +119,21 @@
     <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="node-red:common.label.name"></span></label>
     <input type="text" id="node-input-name" data-i18n="[placeholder]node-red:common.label.name">
   </div>
-    
-    <div class="form-row func-tabs-row">
-      <ul style="min-width: 400px; margin-bottom: 20px;" id="erlgenserver-tabs"></ul>
+        
+  <div class="form-row"
+    style="margin-left: 10px; position: relative; min-height: 2vh;">
+    <input type="checkbox" id="node-input-use_module_name_addressing"
+                    style="display:inline-block; width:15px; vertical-align:baseline;">
+    <label for="node-input-use_module_name_addressing">
+      <span data-i18n="erlgenserver.label.use_module_name_addressing"></span></label>
+  </div>
+
+  <div class="form-row"
+    style="margin-left: 10px; position: relative; height: 40vh; margin-right: 15px; min-height: 5vh;">
+    <div style=" margin-bottom: 5px; width: 35%; padding-left: 60%;">
+      <input type="text" id="node-input-handler-target-filter">
     </div>
-    
-    <div id="erlgenserver-tabs-content" style="min-height: calc(100% - 95px);">
-    
-      <div id="erlgenserver-tab-statem-config" style="display:none">
-        <div class="form-row">
-          <input type="checkbox" id="node-input-use_module_name_addressing"
-                          style="display:inline-block; width:15px; vertical-align:baseline;">
-          <label for="node-input-use_module_name_addressing">
-            <span data-i18n="erlgenserver.label.use_module_name_addressing"></span></label>
-        </div>
-      </div>
-    
-      <div id="erlgenserver-tab-handler-config" style="display:none">
-        <div class="form-row"
-          style="margin-left: 10px; position: relative; height: 40vh; margin-right: 15px; min-height: 5vh;">
-          <div style=" margin-bottom: 5px; width: 35%; padding-left: 60%;">
-            <input type="text" id="node-input-handler-target-filter">
-          </div>
-    
-          <div id="node-input-handler-target-container-div"></div>
-        </div>
-      </div>
-    </div>
+
+    <div id="node-input-handler-target-container-div"></div>
+  </div>
 </script>

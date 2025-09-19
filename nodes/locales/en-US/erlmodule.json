@@ -6,6 +6,7 @@
       "statusset": "Status Set",
       "name": "Name",
       "module_name": "Module Name",
+      "template": "Insert Boilerplate",
       "tab": {
         "code": "Code",
         "config": "Settings"
