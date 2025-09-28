@@ -5,25 +5,26 @@ Implements the Erlang generic server behaviour.
 
 : module (string) : name of the module to be addressed.
 : call (string) : function to be called on the module.
-: *payload* (string | buffer | any) : (optinal) arguments to be passed to function call.
+: *payload* (string | buffer | any) : (optional) arguments to be passed to function call.
 
 ### Outputs
 
 : payload (any) : return value of the module function.
 
+### Details
 
-### Process versus modules
+**Process versus modules**
 
-Generic Servers can address their module using either Process Id (Pid) or the Module Name (ModName). For convenience,
-Erlang-Red alongs both forms of addressing.
+Generic Servers can address their module using either Process Id (Pid) or the Module Name (ModName). 
+For convenience, Erlang-Red alongs both forms of addressing.
 
-The advantage is that using process ids (the default) implies that each GenServer **node** spins up its own copy of the
-module(s) that its managing.
+The advantage is that using process ids (the default) implies that each GenServer **node** spins up its 
+own copy of the module(s) that its managing.
 
-Thus module that are used in genserver nodes can be reused across multiple genserver nodes and maintain unique state
-with each genserver node.
+Thus module that are used in genserver nodes can be reused across multiple genserver nodes 
+and maintain unique state with each genserver node.
 
-### Addressing mode
+**Addressing mode**
 
 Default is to address modules using `gen_server: call(Pid, ....)` to allow for multiple instance of the same module.
 
@@ -33,7 +34,7 @@ individual process ids.
 To enforce singleton behaviour, use module name addressing and ensure that the module is only started by one generic
 server node. This is <b>not</b> enforced by the system.
 
-### Messages
+**Messages**
 
 Message must have two attributes `call` for the function name and `module` for the name of the module that is being
 addressed.
@@ -41,11 +42,11 @@ addressed.
 Even if using process id addressing, the module name **must** be sent to the genserver node. It will then do an internal
 mapping to process id for the corresponding module name.
 
-### Multiple modules
+**Multiple modules**
 
-A genserver node can manage multiple modules, each address by its unique module name.
+A genserver node can manage multiple modules, each address by its unique module name. Even if multiple gen server nodes are created with the same module, each module instance is independented **if and only if** using process addressing mode.
 
-### Failure
+**Failure**
 
 Modules are either started with `start` or `start_link` depending on which function their define - `start_link` has
 priority if both are defined.
@@ -56,6 +57,8 @@ but maintaining the genserver node might be a use-case.
 
 If the genserver node does fail and it should be restarted, then it is the **responsibility** of the user to use the
 supervisor node to create a supervisor for the genserver node.
+
+### References 
 
 Finally, see [OTP Doco](https://www.erlang.org/doc/apps/stdlib/gen_server.html) for more details.
 

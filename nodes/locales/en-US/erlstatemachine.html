@@ -1,16 +1,33 @@
-<script type="text/html" data-help-name="erlstatemachine">
-  <p>Implements that State Machine behaviour.</p>
-  Implements the Erlang state machine behaviour.
+<script type="text/markdown" data-help-name="erlstatemachine">
+Implements that State Machine behaviour.
 
-<p>
-See <a href="https://www.erlang.org/doc/apps/stdlib/gen_statem">OTP Docu</a> for more details.
-</p>
+### Inputs
 
-<p>
-A handler can only be of type <code>erlmodule</code>.
-</p>
+: action (string) : action to be performed on the state machine.
+: *payload* (string | buffer | any) : (optional) arguments passed to the action.
 
-<p>
-  <a href='https://flows.red-erik.org/f/5672fa442b2b881d' target='_blank'>Example</a>
-</p>
+### Outputs
+
+: payload (any) : return value of performing the action.
+: _statem.state_prev (string) : previous state.
+: _statem.state_curr (string) : current state.
+: _statem.action (string) : action performed.
+
+### Details
+
+To use a state machine node, a module node needs to be implemented. 
+
+The module node MUST implement the state machine behaviour: 
+`-behaviour(gen_statem)` is required. The module module defines a boilerplate
+template code for the state machine behaviour, start there if unsure.
+
+State machine node does not restart failed process, it remains the responsibility
+of the user to use supervisor nodes to restart failing nodes.
+
+### References
+
+- [OTP Docu](https://www.erlang.org/doc/apps/stdlib/gen_statem)
+- [Usage example](https://flows.red-erik.org/f/5672fa442b2b881d)
+- [Usage example 2](https://flows.red-erik.org/f/30a121650c89fce3)
+
 </script>

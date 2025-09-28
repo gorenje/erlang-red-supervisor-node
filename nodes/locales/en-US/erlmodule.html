@@ -1,6 +1,28 @@
-<script type="text/html" data-help-name="erlmodule">
-  <p>Node for encapsulating erlang module code.</p>
-  Node for encapsulating erlang module code.
+<script type="text/markdown" data-help-name="erlmodule">
+Node for encapsulating Erlang module code.
 
-Defines a module that can be used with a state machine and other elements of Erlang-Red.
+### Inputs
+
+None.
+
+### Outputs
+
+None.
+
+### Details
+
+Module nodes provide the means to store Erlang module code in flows. Modules are used for provide the behaviours for the Generic Server, Statemachine and Event handler nodes. For each of these behaviours, module nodes have boilerplate template code to provide a starting point.
+
+Module nodes can also provide helper code for the function nodes that make use of them.
+
+Module nodes are always initialised and installed before other nodes. So they are guaranteed to be available to other nodes when flow execution begins.
+
+Modules are installed in the Eshell that, for example, the docker image drops into. Modules are therefore also accessible in the Erlang shell.
+
+### References
+
+- [Erlang Documentation](https://www.erlang.org/doc/system/modules.html)
+- [Module as helper for function node](https://flows.red-erik.org/f/81305f9f22711156)
+- [Module with state machine](https://flows.red-erik.org/f/30a121650c89fce3)
+
 </script>
