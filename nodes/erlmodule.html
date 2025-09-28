@@ -41,6 +41,7 @@
 
     oneditprepare: function() {
       var node = this;
+      var moduleNameRegExp = new RegExp(/-module\((.+)\)[.]/);
 
       this.editor = RED.editor.createEditor({
         id: 'node-input-erlmodule-editor',
@@ -50,6 +51,14 @@
         height: "calc(80vh)",
         focus: true
       });
+
+      let updateModuleName = (e) => {
+        let code = node.editor.getValue();
+        if (moduleNameRegExp.test(code)) {
+          $('#node-input-module_name').val(moduleNameRegExp.exec(code)[1]).trigger('change')
+        }
+      }
+      this.editor.onDidChangeModelContent(updateModuleName);
 
       $('.template-button').on('click', (e) =>{
         let templateCode = {
