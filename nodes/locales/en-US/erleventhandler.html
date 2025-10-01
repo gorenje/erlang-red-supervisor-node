@@ -10,11 +10,11 @@ This node is responsible for wrapping the module inside a event handler process.
 1. Event handler management
 : action (string) : either `add_handler` or `delete_handler`.
 : module_name (string) : module name to be either deleted or added to the event handler.
-: *module_id* (string) : (optional) module id to use if this module is to be used multiple times in the handler.
-: *module_arg* (string) : (optional) argument to be passed to the module as third argument of the `add_handler/3` call.
+: *module_id* (string) : (optional) module id to use if this module is to be used multiple times in the handler. Handler becomes the tuple `{module_name, module_id}` if set, else `module_name`.
+: *module_arg* (string) : (optional) argument to be passed to the module as third argument of the `add_handler/3` call.  If this not provided, the `Msg` structure is passed to the handler as third argument.
 
 2. Sending events
-: payload (string) : event to be triggered on event handler.
+: event (string | any) : event triggered on event handler. This event is passed to all configured event handlers.
 
 ### Outputs
 
@@ -61,7 +61,7 @@ The event handler node does not wait for the response, return values are solely 
 
 Event handler nodes can be configured with static handlers, those defined at deploy time and also dynamic handlers that are added at runtime.
 
-Static nodes are configured in the node by selecting the module node, an optional module id and an optional argument. Currently an argument can only be a string that is converted to a binary before being passed to the [`add_handler/3`](https://www.erlang.org/doc/apps/stdlib/gen_event.html#add_handler/3) function.
+Static nodes are configured in the node by selecting the module node, an optional module id and an optional argument. Currently an argument can only be a string that is converted to a binary before being passed to the [`add_handler/3`](https://www.erlang.org/doc/apps/stdlib/gen_event.html#add_handler/3) function. If the argument field is not defined, then an empty list `[]` is passed as third argument to add_handler.
 
 Dynamic handlers can be added using the management message described above. Handlers can also be removed using those messages, those handlers can also be statically defined handlers but doing sure things might, in certain environments, lead to confusion.
 

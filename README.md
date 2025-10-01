@@ -1,4 +1,4 @@
-# Erlang Supervisor Node
+# Erlang Behavioural Nodes
 
 **Note**: Nodes are implemented for [Erlang-Red](https://github.com/gorenje/erlang-red) and cannot - yet - be used with Node-RED but they can be installed in Node-RED.
 
