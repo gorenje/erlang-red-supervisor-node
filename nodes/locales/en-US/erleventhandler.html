@@ -1,11 +1,94 @@
-<script type="text/html" data-help-name="erleventhandler">
-  <p>Implements that event handler behaviour.</p>
-  Implements the Erlang event behaviour.
+<script type="text/markdown" data-help-name="erleventhandler">
+Wraps event handler behaviour.
 
-See <a href="https://www.erlang.org/doc/apps/stdlib/gen_event.html">OTP Docu</a> for more details.
+Node only works with a module node that define the event handler behaviour. 
 
-<p>
-<a href='https://flows.red-erik.org/f/b70a7ce34819e4d5' target="_blank">Example</a>.
-</p>
+This node is responsible for wrapping the module inside a event handler process. It will **not** revive processes that fail, that is the responsibility of the user to add a supervisor node for this node, not the module node.
+
+### Inputs
+
+1. Event handler management
+: action (string) : either `add_handler` or `delete_handler`.
+: module_name (string) : module name to be either deleted or added to the event handler.
+: *module_id* (string) : (optional) module id to use if this module is to be used multiple times in the handler.
+: *module_arg* (string) : (optional) argument to be passed to the module as third argument of the `add_handler/3` call.
+
+2. Sending events
+: payload (string) : event to be triggered on event handler.
+
+### Outputs
+
+1. Event handler management
+: payload (any) : Response of calling <code>gen_event&colon;add_handler/3</code> or <code>gen_event&colon;remove_handler/3</code>.
+
+2. Sending events
+: *Unknown* (unknown) : The event handler modules may or may not generated messages, the event handler node does not produce any output messages.
+
+### Details
+
+Event handler node does not restart failed process, it remains the *responsibility* of the user to use supervisor nodes to restart failing nodes. The event handler will start all handlers registered with it when a supervisor revives the handler.
+
+An event handler node will raise an exception if adding a handler that does not exist.
+
+Event handlers do not response nor reply to messages sent to them. Therefore sending a message to the event handler will, initially, not send an output message. Sending output messages need to be done via the event handler module.
+
+To use a event handler node, a module node needs to be implemented. 
+
+The module node MUST implement the event behaviour `gen_event`, ie `-behaviour(gen_event)` in the module code. The module defines a boilerplate template code for the event handler, start there if unsure.
+
+**Defining the handler**
+
+Handlers are defined using the module node using the `gen_event` behaviour. There are boilerplate templates define in the module node if unsure.
+
+The `handle_event/2` function is passed a specific event, not just the `payload` of the message but also the entire message hash structure and the node definition of the event handler wrapper:
+
+```erlang
+handle_event({EventName, Msg, EventHandlerNodeDef}, State) ->
+    ...
+    {ok, State};
+```
+
+Possible return values are described over at [learn you some Erlang](https://learnyousomeerlang.com/event-handlers):
+
+- `{ok, NewState}`
+- `{ok, NewState, hibernate}` - which puts the event manager itself into hibernation until the next event
+- `remove_handler`
+- `{swap_handler, Args1, NewState, NewHandler, Args2}`
+
+The event handler node does not wait for the response, return values are solely handled by the internal gen_event behaviour.
+
+**Configuration**
+
+Event handler nodes can be configured with static handlers, those defined at deploy time and also dynamic handlers that are added at runtime.
+
+Static nodes are configured in the node by selecting the module node, an optional module id and an optional argument. Currently an argument can only be a string that is converted to a binary before being passed to the [`add_handler/3`](https://www.erlang.org/doc/apps/stdlib/gen_event.html#add_handler/3) function.
+
+Dynamic handlers can be added using the management message described above. Handlers can also be removed using those messages, those handlers can also be statically defined handlers but doing sure things might, in certain environments, lead to confusion.
+
+**Sending Messages**
+
+Because event handlers do not return values directly to the event handler node, messages to be passed out via the event handler node (i.e. this node) need to be specified by the module. This is because events are handled asynchronously by the module, i.e., the event hander node does not wait for a response.
+
+If event handlers are to send messages, then use the boilerplate code template "Event w/ Msg". It uses the [`ered_nodes:send_msg_to_connected_nodes/2`](https://github.com/gorenje/erlang-red/blob/385e87f498199a44c99c2aa4d0166a9ff43428c9/src/ered_nodes.erl#L232-L249) function to send message on to all the nodes connected to the event handler node - not module node (Side-note: module nodes don't have connections anyway).
+
+To send a message from an event handler module:
+
+```erlang
+handle_event({EventName, Msg, EventHandlerNodeDef}, State) ->
+    Msg2 = Msg#{
+        <<"payload">> => <<"new payload">>
+    },
+    ered_nodes:send_msg_to_connected_nodes(EventHandlerNodeDef, Msg2),
+    {ok, State}.
+```
+
+The `EventHandlerNodeDef` is the node definition of the event handler and it contains the wires on which the new Msg hash structure is sent.
+
+### References
+
+- [learn you some Erlang](https://learnyousomeerlang.com/event-handlers)
+- [Gen Event Principles](https://www.erlang.org/doc/system/events)
+- [OTP Functional documentation](https://www.erlang.org/doc/apps/stdlib/gen_event.html)
+- [Usage example](https://flows.red-erik.org/f/b70a7ce34819e4d5)
 
 </script>

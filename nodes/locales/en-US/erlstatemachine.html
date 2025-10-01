@@ -1,5 +1,7 @@
 <script type="text/markdown" data-help-name="erlstatemachine">
-Implements that State Machine behaviour.
+Implements the State Machine behaviour.
+
+Node used to create a state machine using an existing module.
 
 ### Inputs
 
@@ -12,21 +14,21 @@ Implements that State Machine behaviour.
 : _statem.state_prev (string) : previous state.
 : _statem.state_curr (string) : current state.
 : _statem.action (string) : action performed.
+: *_statem.payload* (string | buffer | any) : (optional) original payload sent with the action.
 
 ### Details
 
 To use a state machine node, a module node needs to be implemented. 
 
-The module node MUST implement the state machine behaviour: 
-`-behaviour(gen_statem)` is required. The module module defines a boilerplate
-template code for the state machine behaviour, start there if unsure.
+The module node MUST implement the state machine behaviour: `-behaviour(gen_statem)` is required. The module module defines a boilerplate template code for the state machine behaviour, start there if unsure.
 
-State machine node does not restart failed process, it remains the responsibility
-of the user to use supervisor nodes to restart failing nodes.
+State machine node does not restart failed process, it remains the responsibility of the user to use supervisor nodes to restart failing nodes.
 
 ### References
 
-- [OTP Docu](https://www.erlang.org/doc/apps/stdlib/gen_statem)
+- [learn you some Erlang](https://learnyousomeerlang.com/finite-state-machines)
+- [statem principles](https://www.erlang.org/doc/system/statem)
+- [OTP functional documentation](https://www.erlang.org/doc/apps/stdlib/gen_statem)
 - [Usage example](https://flows.red-erik.org/f/5672fa442b2b881d)
 - [Usage example 2](https://flows.red-erik.org/f/30a121650c89fce3)
 

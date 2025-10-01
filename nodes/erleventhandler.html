@@ -11,7 +11,11 @@
         value:"",
       },
       handlers: {
-        value: [{ nodeid: "", moduleterm: ""}]
+        value: [{ 
+          nodeid: "",  // node id of the module with the code
+          moduleterm: "", // (optional) unique id for the module if instantiated multiple times
+          arg: "" // (optional) a single string as argument in case something needs to be passed to the module
+        }]
       }
     },
 
@@ -36,8 +40,12 @@
     oneditprepare: function() {
       let allModules = [ ["", "-- select module --"], ...RED.nodes.filterNodes({ type: "erlmodule" }).map( d => [d.id, d.module_name] )]
 
+      if ( this.handlers.length == 0 ) {
+        this.handlers.push({ nodeid: "", moduleterm: "", arg: ""})
+      }
+
       this.handlers.sort((a, b) => a.nodeid < b.nodeid).forEach(currVal => {
-        var sltObj = $('<select>', { class: 'erleventhandler-erlmodule' })
+        var sltObj = $('<select>', { class: 'erleventhandler-erlmodule', style: "width: 30%; min-width: 150px;" })
 
         for (var idx = 0; idx < allModules.length; idx++) {
           let val = allModules[idx]
@@ -46,14 +54,15 @@
           sltObj.append($("<option>", { value: val[0], ...selected }).append(val[1]))
         }
 
-        var txtObj = $('<input>', { type: "text", value: currVal.moduleterm, style: "width: 200px;", class: "erleventhandler-erlterm" })
+        var txtObj = $('<input>', { type: "text", value: currVal.moduleterm, placeholder: "Module Id", style: "margin-left: 5px; width: 20%; min-width: 100px;", class: "erleventhandler-erlterm" })
+        var argObj = $('<input>', { type: "text", value: currVal.arg, placeholder: "Argument", style: "margin-left: 5px; width: 30%; min-width: 150px;", class: "erleventhandler-erlarg" })
 
         var container = $("<div>", { class: "form-row" });
 
-        container.append('<a href="#" style="float: right; color: red;" onclick="$(this).parent().remove(); return false;"><i class="fa fa-close"></i></a>')
-        container.append('<a href="#" style="float: right; margin-right: 10px; color: green;" onclick="$(\'#erleventhandler-handler-config-container\').append($(this).parent().clone()); return false;"><i class="fa fa-plus"></i></a>')
+        container.append('<a href="#" style="margin-right: 7px; color: green;" onclick="$(\'#erleventhandler-handler-config-container\').append($(this).parent().clone()); return false;"><i class="fa fa-plus"></i></a>')
+        container.append('<a href="#" style="margin-right: 7px; color: red;" onclick="$(this).parent().remove(); return false;"><i class="fa fa-close"></i></a>')
 
-        container.append(sltObj).append(txtObj)
+        container.append("<br>").append(sltObj).append(txtObj).append(argObj)
 
         container.appendTo($('#erleventhandler-handler-config-container'))
       })      
@@ -65,7 +74,11 @@
     oneditsave: function() {
       let result = []
       $($('#erleventhandler-handler-config-container').find('.erleventhandler-erlmodule')).each((idx, elem) => {
-        result.push({ nodeid: $(elem).val(), moduleterm: $(elem).siblings().filter(".erleventhandler-erlterm").val() })
+        result.push({ 
+          nodeid: $(elem).val(), 
+          moduleterm: $(elem).siblings().filter(".erleventhandler-erlterm").val(),
+          arg: $(elem).siblings().filter(".erleventhandler-erlarg").val() 
+        })
       })
       this.handlers = result
     },
@@ -85,17 +98,7 @@
     <input type="text" id="node-input-name" data-i18n="[placeholder]node-red:common.label.name">
   </div>
 
-  <div class="form-row">
-    <span>Select a static selection of event handlers. <br>
-       Need to define Erlang Module node first else <br>
-      this selection will be empty.</span>
-      
-    <p><p>
-    <span>This can be dynamically extended at runtime <br>
-    using the <b>add_handler</b> message.</span>
-  </div>
-
-  <div class="form-row">
-    <div id="erleventhandler-handler-config-container"></div>
-  </div>
+  <div class='form-row'><i class="fa fa-handshake-o"></i> <span>Static Handlers</span></div>
+  
+  <div id="erleventhandler-handler-config-container"></div>
 </script>

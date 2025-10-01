@@ -1,11 +1,44 @@
-<script type="text/html" data-help-name="erlsupervisor">
-  <p>Supervisor for restarting selected nodes if they die.</p>
-  Supervisor for restarting selected nodes if they die.
+<script type="text/markdown" data-help-name="erlsupervisor">
+Supervisor for restarting selected nodes if they die.
 
-<p>This will restart nodes or a group of nodes, depening on the strategy if they die.
+Nodes in Erlang-Red are all processes. Processes can die and need restarting. One of Erlangs core principles is that process should die fast.
 
-<p>Failure is throwing an exception, die is if the process dies, disappears, vanishes.
+Supervisors are designed to restart process that do die. Erlang-Red takes the position that users are responsible for deciding which processes should be restarted and by extension, which nodes.
 
-<p>For more detauls, <a href="https://www.erlang.org/doc/apps/stdlib/supervisor.html">Erlang documentation</a>.
+The supervisor nodes allow users to design their recovery of flows, Erlang-Red only maintains the core of Erlang-Red and ensures that continues to run. 
+
+**Erlang-Red does not automatically restart failing nodes.** 
+
+This setup is an explicit design decision.
+
+### Inputs
+
+: action (string) : Either `stop` or `restart` to stop the supervisor and all the children it is supervising or to restart them all.
+
+### Outputs
+
+: status (string) : Sent when status of the supervisor has changed. Possible values are `stopped`, `dead`, `restarted` and `started`.
+
+### Details
+
+A supervisor node restarts, stops and starts linked nodes. It manages the entire lifecycle of the node under its care.
+
+Under the hood, the supervisor node uses the `supervisor:start_link/2` behaviour to manage the underlying processes of the nodes being supervised. This is not an emulation of that behaviour, rather it is a visualisation of that behaviour.
+
+**Configuration**
+
+All the main supervisor configurations are supported. These are complex and depended on deeper Erlang/OTP knowledge - if unsure use the defaults.
+
+Some configurations might not be supported, your mileage might vary.
+
+Nodes can be selected visually and a supervisor cannot supervise itself, doing so will lead to dangers beyond the scope of this documentation.
+
+### References 
+
+- [Supervisor principles](https://www.erlang.org/doc/system/sup_princ)
+- [Learn you some Erlang](https://learnyousomeerlang.com/supervisors)
+- [OTP Documentation](https://www.erlang.org/doc/apps/stdlib/supervisor.html)
+- [Usage example - supervisor tree](https://flows.red-erik.org/f/83c5e1824f32abec)
+- [Usage example - supervisors of supervisors of supervisors ...](https://flows.red-erik.org/f/e447b0048a5983b5)
 
 </script>

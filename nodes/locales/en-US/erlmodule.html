@@ -1,5 +1,9 @@
 <script type="text/markdown" data-help-name="erlmodule">
-Node for encapsulating Erlang module code.
+Node for encapsulating Erlang modules.
+
+Modules in Erlang are a collection of functions that can be collectively instantiated using the module. However modules are not to be confused with objects as modules have no internal state nor data.
+
+Modules are better thought of encapsulating common functionality under the banner of a single name.
 
 ### Inputs
 
@@ -17,10 +21,11 @@ Module nodes can also provide helper code for the function nodes that make use o
 
 Module nodes are always initialised and installed before other nodes. So they are guaranteed to be available to other nodes when flow execution begins.
 
-Modules are installed in the Eshell that, for example, the docker image drops into. Modules are therefore also accessible in the Erlang shell.
+Modules are installed in the Eshell that, for example, the docker image drops into. Modules are therefore also accessible within the Erlang process running Erlang-Red.
 
 ### References
 
+- [learn you some Erlang](https://learnyousomeerlang.com/modules)
 - [Erlang Documentation](https://www.erlang.org/doc/system/modules.html)
 - [Module as helper for function node](https://flows.red-erik.org/f/81305f9f22711156)
 - [Module with state machine](https://flows.red-erik.org/f/30a121650c89fce3)
