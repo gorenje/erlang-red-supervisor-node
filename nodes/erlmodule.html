@@ -78,7 +78,7 @@
         if ($('#checkmarkconfirm').is(":checked") || confirm("Replace existing code?") ) {
           this.editor.setValue(content)
         } else {
-          RED.notify("action not confirmed", { type: "errro"})
+          RED.notify("action not confirmed", { type: "error"})
         }
       })
     },
