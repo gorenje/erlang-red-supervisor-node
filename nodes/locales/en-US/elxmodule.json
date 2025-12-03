@@ -1,5 +1,5 @@
 {
-  "erlmodule": {
+  "elxmodule": {
 
 
     "label": {
@@ -11,7 +11,7 @@
       "tab": {
         "code": "Code",
         "config": "Settings"
-      }
+      }      
     },
 
     "status": {

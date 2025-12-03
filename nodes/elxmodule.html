@@ -1,0 +1,141 @@
+<script type="text/javascript">
+  (function(){  
+  RED.nodes.registerType('elxmodule',{
+    color: 'rgb(166,131,187)',
+    icon: "font-awesome/fa-tint",
+    category: 'function',
+    paletteLabel: 'Elixir Module',
+    defaults: {
+      name: {
+        value:"",
+      },
+      module_name: {
+        value: "",
+        required: true,
+        validate: RED.validators.regex(/^[A-Za-z0-9_]+$/)
+      },
+      code: {
+        value: atob("ZGVmbW9kdWxlIE15TW9kdWxlIGRvCiAgQHR5cGVkb2MgIlRoaXMgdHlwZSIKICBAdHlwZWRvYyBzaW5jZTogIjEuMS4wIgogIEB0eXBlIHQgOjogdGVybQoKICBAZG9jICJIZWxsbyB3b3JsZCIKICBAZG9jIHNpbmNlOiAiMS4xLjAiCiAgZGVmIGhlbGxvIGRvCiAgICAid29ybGQiCiAgZW5kCgogIEBkb2MgIiIiCiAgU3VtcyBgYWAgdG8gYGJgLgogICIiIgogIGRlZiBzdW0oYSwgYikgZG8KICAgIGEgKyBiCiAgZW5kCmVuZA=="),
+        required: true
+      }      
+    },
+
+    inputs: 0,
+
+    outputs: 0,
+
+    label: function() {
+      return (this.name || this._def.paletteLabel);
+    },
+
+    labelStyle: function() {
+      return this.name?"node_label_italic":"";
+    },
+
+    // called when node is added to workspace also if copied and pasted.
+    // once for each node added to the workspace
+    onadd: function() {
+    },
+
+    // called when node added to palette - one time
+    onpaletteadd: function() {
+    },
+
+    onpaletteremove: function() {
+    },
+
+    oneditprepare: function () {
+      var node = this;
+      var moduleNameRegExp = new RegExp(/defmodule[\s]+([^\s]+)[\s]+do/);
+
+      this.editor = RED.editor.createEditor({
+        id: 'node-input-elxmodule-editor',
+        mode: 'ace/mode/elixir',
+        value: this.code,
+        // width: "Infinity",
+        // height: "calc(70vh)",
+        focus: true
+      });
+
+      let updateModuleName = (e) => {
+        let code = node.editor.getValue();
+        if (moduleNameRegExp.test(code)) {
+          $('#node-input-module_name').val(moduleNameRegExp.exec(code)[1]).trigger('change')
+        }
+      }
+      this.editor.onDidChangeModelContent(updateModuleName);
+
+      // one time to update the module name for an initial node
+      $('#node-input-module_name').val(moduleNameRegExp.exec(this.code)[1]).trigger('change')
+
+      $('#elxmodule-replace-btn').on('click', (e) => {
+        let templateCode = {
+          "module": atob("ZGVmbW9kdWxlIE15TW9kdWxlIGRvCiAgQHR5cGVkb2MgIlRoaXMgdHlwZSIKICBAdHlwZWRvYyBzaW5jZTogIjEuMS4wIgogIEB0eXBlIHQgOjogdGVybQoKICBAZG9jICJIZWxsbyB3b3JsZCIKICBAZG9jIHNpbmNlOiAiMS4xLjAiCiAgZGVmIGhlbGxvIGRvCiAgICAid29ybGQiCiAgZW5kCgogIEBkb2MgIiIiCiAgU3VtcyBgYWAgdG8gYGJgLgogICIiIgogIGRlZiBzdW0oYSwgYikgZG8KICAgIGEgKyBiCiAgZW5kCmVuZA==")
+        }
+
+        e.preventDefault()
+
+        let content = templateCode[$('#elxmodule-boiler-type').val()]
+
+        if ($('#checkmarkconfirm').is(":checked") || confirm("Replace existing code?")) {
+          this.editor.setValue(content)
+        } else {
+          RED.notify("action not confirmed", { type: "errro" })
+        }
+      })
+    },
+
+    oneditcancel: function () {
+      this.editor.destroy();
+      delete this.editor;
+    },
+
+    oneditsave: function () {
+      this.code = this.editor.getValue();
+      this.editor.destroy();
+      delete this.editor;
+    },
+
+    oneditresize: function (size) {
+      var rows = $("#dialog-form>div:not(.node-text-editor-row)");
+      var height = $("#dialog-form").height() + 30;
+      for (var i = 0; i < rows.length; i++) {
+        height -= $(rows[i]).outerHeight(true);
+      }
+
+      var editorRow = $("#dialog-form>div.node-text-editor-row");
+      height -= (parseInt(editorRow.css("marginTop")) + parseInt(editorRow.css("marginBottom")));
+
+      $("#dialog-form .node-text-editor").css("height", height + "px");
+      this.editor.resize();
+    },
+
+  });
+})();
+
+</script>
+
+<script type="text/html" data-template-name="elxmodule">
+  <div class="form-row">
+    <label for="node-input-module_name"><i class="fa fa-tag"></i> <span data-i18n="elxmodule.label.module_name"></span></label>
+    <input type="text" id="node-input-module_name" data-i18n="[placeholder]elxmodule.label.module_name">
+  </div>
+  
+  <div class="form-row node-text-editor-row">
+    <div style="height: 73vh; min-height:150px;" class="node-text-editor" id="node-input-elxmodule-editor"></div>
+  </div>
+  
+  <div class="form-row">
+    <label for="checkmarkconfirm"><span data-i18n="elxmodule.label.template"></span></label>
+    <select name="elxmodule-boiler-type" id='elxmodule-boiler-type'>
+        <option value="module">Module</option>
+    </select>
+    <input id="checkmarkconfirm" type="checkbox" checked style="width: 5%"></input>
+    <button id="elxmodule-replace-btn" type="button" class="ui-button"><span data-i18n="elxmodule.label.replace_btn"></span></button>
+  </div>
+  
+  <div class="form-row" style="padding-bottom: 20px; margin-bottom: 10px;">
+    <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="elxmodule.label.name"></span></label>
+    <input type="text" id="node-input-name" data-i18n="[placeholder]elxmodule.label.name">
+  </div>
+</script>
