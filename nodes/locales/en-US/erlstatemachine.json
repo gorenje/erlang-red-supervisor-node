@@ -8,7 +8,8 @@
         "statem_config": "Options",
         "handler_config": "Module"
       },
-      "emit-on-state-change": "Only emit output message on state change"
+      "emit-on-state-change": "Only emit output message on state change",
+      "async-messages": "(Async) Use `gen_statem:cast/2` to send message to state machine"
     },
 
     "status": {

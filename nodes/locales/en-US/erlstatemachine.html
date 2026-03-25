@@ -24,6 +24,12 @@ The module node MUST implement the state machine behaviour: `-behaviour(gen_stat
 
 State machine node does not restart failed process, it remains the responsibility of the user to use supervisor nodes to restart failing nodes.
 
+**Asynchronous Messages**
+
+By default the `gen_statem:call/2` is used to send messages to statemachines. However if these do not reply using `{reply, From, ...}`, then this call waits indefinitely. All `handle_event/4` calls therefore **must** generate a reply.
+
+If this is undesired, the use "Asynchronous messaging" instead. Setting found in the options tabs of the respective node.
+
 ### References
 
 - [learn you some Erlang](https://learnyousomeerlang.com/finite-state-machines)
